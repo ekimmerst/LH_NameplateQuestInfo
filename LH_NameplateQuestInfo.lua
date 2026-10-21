@@ -1,7 +1,17 @@
 local addonName = ...
+local Addon = {}
+LH_NameplateQuestInfo = Addon
 local events = CreateFrame("Frame")
 local activePlates, icons = {}, {}
 local elapsed = 0
+local function GetOptions()
+    LH_NameplateQuestInfoDB = type(LH_NameplateQuestInfoDB) == "table" and LH_NameplateQuestInfoDB or {}
+    for _, key in ipairs({"enabled", "showIcon", "showProgress"}) do
+        if type(LH_NameplateQuestInfoDB[key]) ~= "boolean" then LH_NameplateQuestInfoDB[key] = true end
+    end
+    return LH_NameplateQuestInfoDB
+end
+function Addon:GetOption(key) return GetOptions()[key] end
 local function IsSecret(value)
     return issecretvalue and issecretvalue(value)
 end
@@ -123,8 +133,11 @@ local function GetIcon(plate)
 end
 
 local function UpdatePlate(unit, plate)
+    local options = GetOptions()
+    if not options.enabled then return end
     local icon = GetIcon(plate)
     HideOverlay(icon)
+    if not options.showIcon and not options.showProgress then return end
     local ok, isPlayer = pcall(UnitIsPlayer, unit)
     if not ok or IsSecret(isPlayer) or isPlayer then return end
     local deadOK, dead = pcall(UnitIsDeadOrGhost, unit)
@@ -140,17 +153,17 @@ local function UpdatePlate(unit, plate)
         if not attackOK or IsSecret(attackable) or attackable ~= true then return end
     end
     if tooltipOK and objective ~= nil then
-        icon:SetShown(objective)
-        if objective then
+        icon:SetShown(options.showIcon and objective)
+        if objective and options.showProgress then
             if not pcall(UpdateProgress, icon, plate, progress) and icon.progressFrame then
                 icon.progressFrame:Hide()
             end
         end
     elseif IsSecret(related) then
         -- A secret boolean may only be passed to the engine, never inspected.
-        if not pcall(icon.SetShown, icon, related) then icon:Hide() end
+        if options.showIcon and not pcall(icon.SetShown, icon, related) then icon:Hide() end
     else
-        icon:SetShown(related == true)
+        icon:SetShown(options.showIcon and related == true)
     end
 end
 
@@ -161,6 +174,7 @@ end
 local function DiscoverPlates()
     for _, icon in pairs(icons) do HideOverlay(icon) end
     wipe(activePlates)
+    if not Addon:GetOption("enabled") then return end
     if C_NamePlate and C_NamePlate.GetNamePlates then
         for _, plate in ipairs(C_NamePlate.GetNamePlates()) do
             local unit = plate.namePlateUnitToken
@@ -179,6 +193,14 @@ local function DiscoverPlates()
     UpdateAll()
 end
 
+function Addon:SetOption(key, value)
+    if key ~= "enabled" and key ~= "showIcon" and key ~= "showProgress" then return end
+    GetOptions()[key] = value == true
+    elapsed = 0
+    DiscoverPlates()
+    if self.RefreshSettings then self:RefreshSettings() end
+end
+
 for _, event in ipairs({ "ADDON_LOADED", "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD",
     "NAME_PLATE_UNIT_ADDED", "NAME_PLATE_UNIT_REMOVED", "QUEST_LOG_UPDATE",
     "UNIT_QUEST_LOG_CHANGED", "PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED" }) do
@@ -187,9 +209,10 @@ end
 
 events:SetScript("OnEvent", function(_, event, unit)
     if event == "ADDON_LOADED" then
-        if unit == addonName then DiscoverPlates() end
+        if unit == addonName then GetOptions(); DiscoverPlates() end
         return
     end
+    if not Addon:GetOption("enabled") then return end
     if event == "PLAYER_LOGIN" or event == "PLAYER_ENTERING_WORLD" then
         DiscoverPlates()
     elseif event == "NAME_PLATE_UNIT_ADDED" then
@@ -212,7 +235,7 @@ end)
 -- Retry delayed tooltip data and keep anchors current when plate layouts change.
 -- Only visible tracked plates are inspected.
 events:SetScript("OnUpdate", function(_, delta)
-    if not next(activePlates) then
+    if not Addon:GetOption("enabled") or not next(activePlates) then
         elapsed = 0
         return
     end
@@ -222,3 +245,16 @@ events:SetScript("OnUpdate", function(_, delta)
         UpdateAll()
     end
 end)
+
+SLASH_LH_NAMEPLATEQUESTINFO1 = "/lh_nameplatequestinfo"
+SlashCmdList.LH_NAMEPLATEQUESTINFO = function(message)
+    local command = (message or ""):lower():match("^%s*(.-)%s*$")
+    if command == "on" or command == "off" then
+        Addon:SetOption("enabled", command == "on")
+        print(Addon:GetOption("enabled") and "LH_NameplateQuestInfo: Enabled." or "LH_NameplateQuestInfo: Disabled.")
+    elseif command == "" and Addon.category then
+        Settings.OpenToCategory(Addon.category:GetID())
+    else
+        print("LH_NameplateQuestInfo: /lh_nameplatequestinfo on | off. Use /lh_nameplatequestinfo to open settings.")
+    end
+end
