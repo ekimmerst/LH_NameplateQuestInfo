@@ -1,10 +1,10 @@
-# NameplateQuestInfo project knowledge
+# LH_NameplateQuestInfo project knowledge
 
-- Communicate with the user in German. Addon messages, comments, metadata, and documentation are in English, matching HideMe.
-- Read NameplateQuestInfo.lua, NameplateQuestInfo.toc and README.md before editing.
-- Standalone WoW Forever Beta addon; interface 16001 copied from the installed HideMe metadata. Version 0.2.7.
-- Work only within NameplateQuestInfo for NameplateQuestInfo requests. Other addons are separate projects.
-- No external dependencies or build step. Git repository uses main. GitHub publication is requested; intended repository: https://github.com/ekimmerst/nameplatequestinfo. Check actual remote and publication state before relying on this URL.
+- Communicate with the user in German. Addon messages, comments, metadata, and documentation are in English, matching LH_HideMe.
+- Read LH_NameplateQuestInfo.lua, LH_NameplateQuestInfo.toc and README.md before editing.
+- Standalone WoW Forever Beta addon; interface 16001 copied from the installed LH_HideMe metadata. Version 0.2.8.
+- Work only within LH_NameplateQuestInfo for LH_NameplateQuestInfo requests. Other addons are separate projects.
+- No external dependencies or build step. Local Git repository uses main. GitHub remotes were removed on October 21, 2026 at the user's request. A new repository is planned but has not been created; no GitHub repository is currently connected.
 - Quest icons and objective progress are always active while the addon is loaded. No slash commands or SavedVariables. Discover existing plates on ADDON_LOADED for this addon, login and world entry.
 - Own unprotected overlays use QuestNormal, size 20, anchored RIGHT to the health-bar LEFT at -6, 0. Prefer UnitFrame.HealthBarsContainer, then healthBar, then the plate.
 - A separate progress frame appears six pixels right of the health-bar area or visible level badge. Read counters from leftText/rightText, deduplicate identical counters and stack different counters. Hide both overlays before evaluation and on removal/discovery. Text failures must not suppress the icon; missing/restricted counters hide progress. Discover nameplate1..40 with GetNamePlateForUnit as well as GetNamePlates to support frames without namePlateUnitToken.
@@ -19,13 +19,20 @@
 
 ## Addon list artwork
 
-- Version 0.2.2 adds an open-eye icon matching HideMe's golden frame, violet glow and hand-painted WoW style. No Lua behavior changes.
+- Version 0.2.2 adds an open-eye icon matching LH_HideMe's golden frame, violet glow and hand-painted WoW style. No Lua behavior changes.
 - Media/Icon.png is the current golden quest exclamation icon generated with the built-in image_gen tool, using the previous eye icon as an edit target.
-- Media/Icon.tga is the 256x256 uncompressed 32-bit BGRA texture with top-left origin. NameplateQuestInfo.toc references Interface\AddOns\NameplateQuestInfo\Media\Icon through IconTexture.
+- Media/Icon.tga is the 256x256 uncompressed 32-bit BGRA texture with top-left origin. LH_NameplateQuestInfo.toc references Interface\AddOns\LH_NameplateQuestInfo\Media\Icon through IconTexture.
 - Keep Media when installing. Native addon-list rendering requires in-game verification; restart the client after adding the texture if needed.
 
-- Version 0.2.5 renames the addon, directory, Lua/TOC files, slash registration, chat prefix, texture path and per-character settings to NameplateQuestInfo. Command: /nameplatequestinfo. Settings default to off under the new SavedVariables name.
+- Version 0.2.5 renames the addon, directory, Lua/TOC files, slash registration, chat prefix, texture path and per-character settings to the former NameplateQuestInfo name. Historical command: /nameplatequestinfo. Settings default to off under the new SavedVariables name.
 
 - Version 0.2.6 removes slash commands and saved settings; quest overlays activate automatically, including when older saved settings were off.
 
 - Version 0.2.7 replaces the addon-list eye artwork with a bold golden quest exclamation mark, preserving the gold border and violet fantasy background. Media/Icon.tga is converted from the PNG with bicubic downsampling. No Lua behavior changes.
+
+## Rename to LH_NameplateQuestInfo
+
+- Version 0.2.8 renames the folder, Lua/TOC files, title, author metadata, icon path and English documentation to LH_NameplateQuestInfo.
+- The Lua implementation is byte-for-byte unchanged. It receives the addon name through varargs, so ADDON_LOADED discovery follows the new folder name automatically.
+- No slash commands or saved variables exist; no settings migration is required. Fully restart WoW after the folder rename.
+- In-game verification of the rename remains pending.
