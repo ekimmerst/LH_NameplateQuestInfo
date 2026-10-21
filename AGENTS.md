@@ -36,3 +36,5 @@
 - The Lua implementation is byte-for-byte unchanged. It receives the addon name through varargs, so ADDON_LOADED discovery follows the new folder name automatically.
 - No slash commands or saved variables exist; no settings migration is required. Fully restart WoW after the folder rename.
 - In-game verification of the rename remains pending.
+
+- The addon now requires LH_Tweaks as its shared configuration host and load-order dependency. CurseForge releases must also declare the LH_Tweaks project as a required dependency.

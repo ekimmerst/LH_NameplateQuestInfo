@@ -10,7 +10,7 @@ Install LH_NameplateQuestInfo in your `Interface/AddOns` folder and enable it in
 
 Nameplates must be visible for LH_NameplateQuestInfo to display markers. Enable friendly nameplates when looking for friendly quest mobs.
 
-Disable the addon in the AddOns menu to turn off its display. LH_NameplateQuestInfo works on its own and does not require any other addons.
+Disable the addon in the AddOns menu to turn off its display. LH_NameplateQuestInfo requires the shared LH_Tweaks core.
 
 The addon uses a golden quest exclamation mark as its icon in the AddOns menu.
 
@@ -23,3 +23,7 @@ The `LH_NameplateQuestInfo` folder must contain `LH_NameplateQuestInfo.toc`, `LH
 ### 0.2.8 - 2026-10-21
 
 - Renamed NameplateQuestInfo to LH_NameplateQuestInfo, including the folder, Lua/TOC files, metadata, icon path and English documentation.
+
+## Required core addon
+
+Install and enable **LH_Tweaks** alongside this addon. LH_Tweaks is the shared LiteHawk configuration host and must load first. CurseForge releases must list LH_Tweaks as a required dependency so the client installs it automatically.
