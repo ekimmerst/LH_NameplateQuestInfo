@@ -4,7 +4,7 @@
 - Read LH_NameplateQuestInfo.lua, LH_NameplateQuestInfo.toc and README.md before editing.
 - WoW Forever Beta addon; interface 16001 copied from the installed LH_HideMe metadata. Version 0.3.0; requires the LH_Tweaks configuration host.
 - Work only within LH_NameplateQuestInfo for LH_NameplateQuestInfo requests. Other addons are separate projects.
-- No build step. Local Git repository uses main. GitHub remotes were removed on October 21, 2026 at the user's request. A new repository is planned but has not been created; no GitHub repository is currently connected.
+- No build step. Local Git repository uses main, tracking origin/main. Public repository: https://github.com/ekimmerst/LH_NameplateQuestInfo
 - Quest icons and objective progress default to enabled. Version 0.3.0 introduces LH_NameplateQuestInfoDB per character with enabled/showIcon/showProgress, plus /lh_nameplatequestinfo to open settings and on|off to toggle the master setting. Discover existing plates on addon load, login, world entry and option changes. Disabled mode hides both overlays, clears tracked plates and skips event/polling inspections.
 - Own unprotected overlays use QuestNormal, size 20, anchored RIGHT to the health-bar LEFT at -6, 0. Prefer UnitFrame.HealthBarsContainer, then healthBar, then the plate.
 - A separate progress frame appears six pixels right of the health-bar area or visible level badge. Read counters from leftText/rightText, deduplicate identical counters and stack different counters. Hide both overlays before evaluation and on removal/discovery. Text failures must not suppress the icon; missing/restricted counters hide progress. Discover nameplate1..40 with GetNamePlateForUnit as well as GetNamePlates to support frames without namePlateUnitToken.
