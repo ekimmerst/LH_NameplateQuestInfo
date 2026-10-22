@@ -1,5 +1,7 @@
 <h1 style="color: #d9a94b;">LH NameplateQuestInfo</h1>
 
+<p>Add quest markers and available objective progress to relevant NPCs on Blizzard nameplates.</p>
+
 <p>See which nearby NPCs matter for your quests without searching through every tooltip. LH NameplateQuestInfo adds small quest cues to Blizzard's own nameplates.</p>
 
 <h2 style="color: #73c9c4;">What it shows</h2>
