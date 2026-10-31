@@ -1,12 +1,12 @@
 ## Interface: 16001
-## Dependencies: LH_Tweaks
+## OptionalDeps: LH_Tweaks
 ## Title: LH NameplateQuestInfo
 ## Group: LH_Tweaks
 ## X-Part-Of: LH_Tweaks
 ## IconTexture: Interface\AddOns\LH_NameplateQuestInfo\Media\Icon
 ## Notes: Shows quest objective icons and progress on nameplates automatically.
 ## Author: LH_NameplateQuestInfo
-## Version: 0.3.0
+## Version: 0.3.1
 ## SavedVariablesPerCharacter: LH_NameplateQuestInfoDB
 
 LH_NameplateQuestInfo.lua

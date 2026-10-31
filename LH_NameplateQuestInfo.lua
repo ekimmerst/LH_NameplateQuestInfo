@@ -252,8 +252,10 @@ SlashCmdList.LH_NAMEPLATEQUESTINFO = function(message)
     if command == "on" or command == "off" then
         Addon:SetOption("enabled", command == "on")
         print(Addon:GetOption("enabled") and "LH_NameplateQuestInfo: Enabled." or "LH_NameplateQuestInfo: Disabled.")
-    elseif command == "" and Addon.category then
+    elseif command == "" and Addon.category and Settings and Settings.OpenToCategory then
         Settings.OpenToCategory(Addon.category:GetID())
+    elseif command == "" then
+        print("LH_NameplateQuestInfo: /lh_nameplatequestinfo on | off. Install and load LH Tweaks for settings.")
     else
         print("LH_NameplateQuestInfo: /lh_nameplatequestinfo on | off. Use /lh_nameplatequestinfo to open settings.")
     end

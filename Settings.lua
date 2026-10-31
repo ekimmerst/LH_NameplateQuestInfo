@@ -31,4 +31,6 @@ local function Build(category, layout)
     end
 end
 
-LH_Tweaks:RegisterModule(addonName, "LH NameplateQuestInfo", Build)
+if LH_Tweaks and LH_Tweaks.RegisterModule then
+    LH_Tweaks:RegisterModule(addonName, "LH NameplateQuestInfo", Build)
+end

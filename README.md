@@ -16,7 +16,7 @@
 
 <h2 style="color: #c78be6;">Settings</h2>
 
-<p>Open <strong>Options → AddOns → LH Tweaks → LH NameplateQuestInfo</strong> to enable the addon and choose markers, progress or both. Your choices are saved per character. Blizzard nameplates need to be visible for the cues to appear.</p>
+<p>With LH Tweaks installed, open <strong>Options → AddOns → LH Tweaks → LH NameplateQuestInfo</strong> to enable the addon and choose markers, progress or both. Without LH Tweaks, use <code>/lh_nameplatequestinfo on|off</code>. Your choices are saved per character. Blizzard nameplates need to be visible for the cues to appear.</p>
 
 <h2 style="color: #73c9c4;">More LH addons</h2>
 
@@ -43,7 +43,7 @@
 
 <h2 style="color: #d9a94b;">Installation and feedback</h2>
 
-<p><strong>LH Tweaks is required</strong> and must be installed alongside LH NameplateQuestInfo. I made this for my own questing, but I hope it helps with yours. If an NPC is missing a marker or shows the wrong progress, please tell me in the CurseForge comments.</p>
+<p><strong>LH Tweaks provides the settings page</strong> when installed alongside LH NameplateQuestInfo. The nameplate overlays also work without it. I made this for my own questing, but I hope it helps with yours. If an NPC is missing a marker or shows the wrong progress, please tell me in the CurseForge comments.</p>
 
 <hr>
 <p><sup>*</sup> Implemented with the help of Codex and GPT-6-SOL and tested by me as thoroughly as I could in the WoW beta client. Quest data can vary; please report anything that does not work as expected.</p>
