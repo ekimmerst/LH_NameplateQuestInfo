@@ -45,5 +45,13 @@
 
 <p><strong>LH Tweaks provides the settings page</strong> when installed alongside LH NameplateQuestInfo. The nameplate overlays also work without it. I made this for my own questing, but I hope it helps with yours. If an NPC is missing a marker or shows the wrong progress, please tell me in the CurseForge comments.</p>
 
+<h2 style="color: #73c9c4;">Changelog</h2>
+
+<p><strong>0.3.1 - Forever</strong></p>
+
+<ul>
+  <li>Nameplate quest markers and progress now work without LH Tweaks; install LH Tweaks to get the settings page.</li>
+</ul>
+
 <hr>
-<p><sup>*</sup> Implemented with the help of Codex and GPT-6-SOL and tested by me as thoroughly as I could in the WoW beta client. Quest data can vary; please report anything that does not work as expected.</p>
+<p><sup>*</sup> Implemented with the help of Codex and GPT-6-SOL. Quest data can vary; please report anything that does not work as expected.</p>
