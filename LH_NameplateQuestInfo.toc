@@ -1,4 +1,4 @@
-## Interface: 16001
+## Interface: 16001, 120105
 ## OptionalDeps: LH_Tweaks
 ## Title: LH NameplateQuestInfo
 ## Group: LH_Tweaks
