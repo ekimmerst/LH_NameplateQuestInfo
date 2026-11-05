@@ -178,6 +178,12 @@ local function UpdatePlate(unit, plate)
 
     local related = QuestRelation(unit)
     local tooltipOK, objective, progress = pcall(TooltipQuestObjective, unit)
+    -- A turn-in NPC is related to an active quest too. Without an unfinished
+    -- objective, do not put our yellow objective marker beside its quest mark.
+    if objective ~= true then
+        local attackOK, attackable = pcall(UnitCanAttack, "player", unit)
+        if attackOK and not IsSecret(attackable) and attackable == false then return end
+    end
     if not IsSecret(related) and related == false then
         -- Attackable NPCs can have objective counters despite a false relation.
         -- Require explicit unfinished tooltip evidence before overriding it.

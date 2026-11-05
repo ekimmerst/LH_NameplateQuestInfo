@@ -48,6 +48,12 @@
 
 <h2 style="color: #73c9c4;">Changelog</h2>
 
+<p><strong>0.3.3 - Forever</strong></p>
+
+<ul>
+  <li>Do not show the yellow objective marker beside friendly quest turn-in NPCs when they have no unfinished objective.</li>
+</ul>
+
 <p><strong>0.3.2 - Forever</strong></p>
 
 <ul>
