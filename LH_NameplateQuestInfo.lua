@@ -4,10 +4,25 @@ LH_NameplateQuestInfo = Addon
 local events = CreateFrame("Frame")
 local activePlates, icons = {}, {}
 local elapsed = 0
+local distances = {
+    iconDistance = {default = 6, max = 50},
+    progressDistance = {default = 6, max = 50},
+    iconTargetDistance = {default = 24, max = 80},
+    progressTargetDistance = {default = 24, max = 80},
+}
+local function ClampDistance(key, value)
+    local config = distances[key]
+    return math.max(0, math.min(config.max, math.floor(value + 0.5)))
+end
 local function GetOptions()
     LH_NameplateQuestInfoDB = type(LH_NameplateQuestInfoDB) == "table" and LH_NameplateQuestInfoDB or {}
     for _, key in ipairs({"enabled", "showIcon", "showProgress"}) do
         if type(LH_NameplateQuestInfoDB[key]) ~= "boolean" then LH_NameplateQuestInfoDB[key] = true end
+    end
+    for key, config in pairs(distances) do
+        local value = LH_NameplateQuestInfoDB[key]
+        LH_NameplateQuestInfoDB[key] = type(value) == "number" and ClampDistance(key, value)
+            or config.default
     end
     return LH_NameplateQuestInfoDB
 end
@@ -80,8 +95,23 @@ local function HideOverlay(icon)
     if icon.progressFrame then icon.progressFrame:Hide() end
 end
 
+-- Platynator draws and scales its own health bar above Blizzard's hidden bar.
+local function GetHealthAnchor(plate, unit)
+    local children = {plate:GetChildren()}
+    for _, display in ipairs(children) do
+        if display.unit == unit and type(display.widgets) == "table" then
+            for _, widget in ipairs(display.widgets) do
+                if widget.kind == "bars" and widget.details
+                    and widget.details.kind == "health" and widget:IsShown() then
+                    return widget
+                end
+            end
+        end
+    end
+end
+
 -- Keep text independent: a text/layout failure must never suppress the icon.
-local function UpdateProgress(icon, plate, text)
+local function UpdateProgress(icon, plate, unit, text, targeted, options)
     if not text or text == "" then return end
     local frame = icon.progressFrame
     if not frame then
@@ -98,20 +128,19 @@ local function UpdateProgress(icon, plate, text)
         label:SetJustifyH("LEFT")
         frame.text = label
     end
-    local unitFrame = plate.UnitFrame
-    local anchor = unitFrame and (unitFrame.HealthBarsContainer or unitFrame.healthBar) or plate
-    local level = unitFrame and unitFrame.PlayerLevelDiffFrame
-    if level and level.IsShown then
-        local ok, shown = pcall(level.IsShown, level)
-        if ok and not IsSecret(shown) and shown == true then anchor = level end
+    local anchor = GetHealthAnchor(plate, unit)
+    if not anchor then
+        local unitFrame = plate.UnitFrame
+        anchor = unitFrame and (unitFrame.healthBar or unitFrame.HealthBar or unitFrame.HealthBarsContainer) or plate
     end
     frame:ClearAllPoints()
-    frame:SetPoint("LEFT", anchor, "RIGHT", 6, 0)
+    frame:SetPoint("LEFT", anchor, "RIGHT",
+        targeted and options.progressTargetDistance or options.progressDistance, 0)
     frame.text:SetText(text)
     frame:Show()
 end
 
-local function GetIcon(plate)
+local function GetIcon(plate, unit, targeted, options)
     local icon = icons[plate]
     if not icon then
         -- Own unprotected overlay; never change Blizzard's nameplate visibility.
@@ -125,17 +154,21 @@ local function GetIcon(plate)
         icons[plate] = icon
     end
     local unitFrame = plate.UnitFrame
-    local anchor = unitFrame and (unitFrame.HealthBarsContainer or unitFrame.healthBar)
+    local anchor = GetHealthAnchor(plate, unit)
+        or (unitFrame and (unitFrame.healthBar or unitFrame.HealthBar or unitFrame.HealthBarsContainer))
         or plate
     icon:ClearAllPoints()
-    icon:SetPoint("RIGHT", anchor, "LEFT", -6, 0)
+    icon:SetPoint("RIGHT", anchor, "LEFT",
+        -(targeted and options.iconTargetDistance or options.iconDistance), 0)
     return icon
 end
 
 local function UpdatePlate(unit, plate)
     local options = GetOptions()
     if not options.enabled then return end
-    local icon = GetIcon(plate)
+    local targetOK, isTarget = pcall(UnitIsUnit, unit, "target")
+    local targeted = targetOK and not IsSecret(isTarget) and isTarget == true
+    local icon = GetIcon(plate, unit, targeted, options)
     HideOverlay(icon)
     if not options.showIcon and not options.showProgress then return end
     local ok, isPlayer = pcall(UnitIsPlayer, unit)
@@ -155,7 +188,7 @@ local function UpdatePlate(unit, plate)
     if tooltipOK and objective ~= nil then
         icon:SetShown(options.showIcon and objective)
         if objective and options.showProgress then
-            if not pcall(UpdateProgress, icon, plate, progress) and icon.progressFrame then
+            if not pcall(UpdateProgress, icon, plate, unit, progress, targeted, options) and icon.progressFrame then
                 icon.progressFrame:Hide()
             end
         end
@@ -194,8 +227,14 @@ local function DiscoverPlates()
 end
 
 function Addon:SetOption(key, value)
-    if key ~= "enabled" and key ~= "showIcon" and key ~= "showProgress" then return end
-    GetOptions()[key] = value == true
+    if distances[key] then
+        if type(value) ~= "number" then return end
+        GetOptions()[key] = ClampDistance(key, value)
+    elseif key == "enabled" or key == "showIcon" or key == "showProgress" then
+        GetOptions()[key] = value == true
+    else
+        return
+    end
     elapsed = 0
     DiscoverPlates()
     if self.RefreshSettings then self:RefreshSettings() end
@@ -203,7 +242,7 @@ end
 
 for _, event in ipairs({ "ADDON_LOADED", "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD",
     "NAME_PLATE_UNIT_ADDED", "NAME_PLATE_UNIT_REMOVED", "QUEST_LOG_UPDATE",
-    "UNIT_QUEST_LOG_CHANGED", "PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED" }) do
+    "UNIT_QUEST_LOG_CHANGED", "PLAYER_TARGET_CHANGED", "PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED" }) do
     events:RegisterEvent(event)
 end
 

@@ -1,22 +1,23 @@
 <h1 style="color: #d9a94b;">LH NameplateQuestInfo</h1>
 
-<p>Add quest markers and available objective progress to relevant NPCs on Blizzard nameplates.</p>
+<p>Add quest markers and available objective progress beside the health bars of relevant NPC nameplates, including Platynator nameplates.</p>
 
-<p>See which nearby NPCs matter for your quests without searching through every tooltip. LH NameplateQuestInfo adds small quest cues to Blizzard's own nameplates.</p>
+<p>See which nearby NPCs matter for your quests without searching through every tooltip. LH NameplateQuestInfo keeps its quest cues vertically centered on the visible health bar as the nameplate changes size.</p>
 
 <h2 style="color: #73c9c4;">What it shows</h2>
 
 <ul>
-  <li>A yellow quest marker beside relevant NPC nameplates.</li>
-  <li>Readable, unfinished objective counters beside the plate when progress is available.</li>
+  <li>A yellow quest marker to the left of the health bar on relevant NPC nameplates.</li>
+  <li>Readable, unfinished objective counters to the right of the health bar when progress is available.</li>
   <li>Separate switches for markers and progress, so you can keep just the part you want.</li>
+  <li>Separate horizontal distances for each cue on normal and targeted nameplates.</li>
 </ul>
 
 <p>The addon uses information the game makes available. If an objective counter is restricted or unavailable, it leaves that counter hidden rather than guessing.</p>
 
 <h2 style="color: #c78be6;">Settings</h2>
 
-<p>With LH Tweaks installed, open <strong>Options → AddOns → LH Tweaks → LH NameplateQuestInfo</strong> to enable the addon and choose markers, progress or both. Without LH Tweaks, use <code>/lh_nameplatequestinfo on|off</code>. Your choices are saved per character. Blizzard nameplates need to be visible for the cues to appear.</p>
+<p>With LH Tweaks installed, open <strong>Options → AddOns → LH Tweaks → LH NameplateQuestInfo</strong> to enable the addon, choose markers or progress, and set separate left and right distances from the health bar for normal and targeted nameplates. The targeted distances help keep both cues clear of Platynator's target indicators. Both cues stay vertically centered on the visible health bar. Without LH Tweaks, use <code>/lh_nameplatequestinfo on|off</code>. Your choices are saved per character. Blizzard nameplates need to be visible for the cues to appear.</p>
 
 <h2 style="color: #73c9c4;">More LH addons</h2>
 
@@ -46,6 +47,13 @@
 <p><strong>LH Tweaks provides the settings page</strong> when installed alongside LH NameplateQuestInfo. The nameplate overlays also work without it. I made this for my own questing, but I hope it helps with yours. If an NPC is missing a marker or shows the wrong progress, please tell me in the CurseForge comments.</p>
 
 <h2 style="color: #73c9c4;">Changelog</h2>
+
+<p><strong>0.3.2 - Forever</strong></p>
+
+<ul>
+  <li>Quest markers and objective progress now stay vertically centered on the visible health bar, including when Platynator scales a targeted nameplate.</li>
+  <li>Added separate left and right distance settings for normal and targeted nameplates, so the cues can clear Platynator's target indicators.</li>
+</ul>
 
 <p><strong>0.3.1 - Forever</strong></p>
 

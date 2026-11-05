@@ -29,6 +29,24 @@ local function Build(category, layout)
             control:SetParentInitializer(parent, function() return Addon:GetOption("enabled") end)
         else parent = control end
     end
+    for _, option in ipairs({
+        {key = "iconDistance", label = "Quest marker distance", default = 6, max = 50, tooltip = "Horizontal distance between the health bar and the quest marker on its left. Saved per character."},
+        {key = "iconTargetDistance", label = "Quest marker distance (targeted)", default = 24, max = 80, tooltip = "Distance on the left while this NPC is your target. Increase it to clear Platynator's target indicator. Saved per character."},
+        {key = "progressDistance", label = "Objective progress distance", default = 6, max = 50, tooltip = "Horizontal distance between the health bar and objective progress on its right. Saved per character."},
+        {key = "progressTargetDistance", label = "Objective progress distance (targeted)", default = 24, max = 80, tooltip = "Distance on the right while this NPC is your target. Increase it to clear Platynator's target indicator. Saved per character."},
+    }) do
+        local key = option.key
+        local variable = "LH_NameplateQuestInfo_" .. key
+        variables[#variables + 1] = variable
+        local setting = Settings.RegisterProxySetting(category, variable, "number", option.label, option.default,
+            function() return Addon:GetOption(key) end,
+            function(value) Addon:SetOption(key, value) end)
+        local slider = Settings.CreateSliderOptions(0, option.max, 1)
+        slider:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right,
+            function(value) return string.format("%d", value) end)
+        local control = Settings.CreateSlider(category, setting, slider, option.tooltip)
+        control:SetParentInitializer(parent, function() return Addon:GetOption("enabled") end)
+    end
 end
 
 if LH_Tweaks and LH_Tweaks.RegisterModule then
